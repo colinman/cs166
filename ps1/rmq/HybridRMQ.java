@@ -24,10 +24,10 @@ public class HybridRMQ implements RMQ {
      */
     public HybridRMQ(float[] elems) {
       int n = elems.length;
-      b = (int)Math.floor(Math.log(n)/Math.log(2)) + 1;
+      b = (int)Math.floor(Math.log(n)) + 1;
       this.elems = elems;
 
-      int num_mins = (int)Math.ceil(n / b);
+      int num_mins = (int)Math.ceil(n / (double)b);
       block_mins = new float [num_mins];
 
       for (int i = 0; i < num_mins; i++) {
@@ -50,8 +50,8 @@ public class HybridRMQ implements RMQ {
     @Override
     public int rmq(int i, int j) {
 
-      int block1 = (int)Math.floor(i / b);
-      int block2 = (int)Math.floor(j / b);
+      int block1 = (int)Math.floor(i / (double)b);
+      int block2 = (int)Math.floor(j / (double)b);
       int minBlock = blockRMQ.rmq(block1 + 1, block2 - 1);
 
       int min1_idx = scanForMin(i, Math.min(j, (block1 + 1) * b));
