@@ -37,7 +37,7 @@ Lookup is performed similar to a two level hybrid query: at each of the k levels
 
 Thus, the time complexity of our hybrid structure is $<O(n\log^{(k)}n), O(1)>$ as required.
 
-\item The increased query time arises from the fact that the query time is $O(k)$ as shown in part (i). Thus, as k increases, the runtime increases. However, since k is a constant, all the hybrid structures still have a query time of $O(1)$, which does not contradict our result in (i).
+\item The increased query time arises from the fact that the query time is based on k as shown in part (i): every level of depth that we add requires another lookup per query. Thus, as k increases, the runtime increases. However, since k is a constant, all the hybrid structures still have a query time of $O(1)$, which does not contradict our result in (i).
 
 \end{enumerate}
 
