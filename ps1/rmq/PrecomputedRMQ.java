@@ -7,6 +7,8 @@ package rmq;
  */
 public class PrecomputedRMQ implements RMQ {
 	
+	int[][] precomputedTable;
+
     /**
      * Creates a new PrecomputedRMQ structure to answer queries about the
      * array given by elems.
@@ -14,8 +16,19 @@ public class PrecomputedRMQ implements RMQ {
      * @elems The array over which RMQ should be computed.
      */
     public PrecomputedRMQ(float[] elems) {
-    	// TODO: Implement this! 
-    }
+		int n = elems.length;
+		precomputedTable = new int[n][n];
+
+		int index_rmq = -1; // Initial value should never be used 
+   		for (int i = 0; i < n; i++){
+			for (int j = i; j < n; j++){
+				if (i == j || elems[j] < elems[index_rmq]){
+					index_rmq = j; 
+				}
+				precomputedTable[i][j] = index_rmq;	
+			}
+		}		 
+	}
 
     /**
      * Evaluates RMQ(i, j) over the array stored by the constructor, returning
@@ -23,7 +36,7 @@ public class PrecomputedRMQ implements RMQ {
      */
     @Override
     public int rmq(int i, int j) {
-    	// TODO: Implement this!
-    	return -1;
+		return precomputedTable[i][j];
     }
+
 }
