@@ -21,6 +21,16 @@ In order to calculate the largest value of $k$ for which $2^k \leq j - i + 1$, w
 \newpage
 
 \item[Problem 2]\noindent
+\begin{enumerate}[label=\roman*]
+\item Given a 2D array with dimensions $m$ by $n$ we can construct an AMQ by building $min\{m, n\}$ RMQ's along the longer dimension, where each RMQ has the runtime $< O(max\{m, n\})), O(1)>$ (for example, the FischerHeun RMQ). We see that constructing each of these RMQ's takes $O(min\{m, n\} * max\{m, n\}) = O(mn)$. When answering queries, we simply run each RMQ that has a slice of the range, getting us $O(m)$ values. We can then loop over these values to find the minimum. Since querying each of our RMQ's takes $O(1)$ time, and we must query $O(min\{m, n\})$ of them, the total query time is $O(min\{m, n\})$. Hence, we have created a $<O(mn), O(min\{m, n\})>$-time AMQ structure.
+
+\item We can construct the appropriate AMQ by extending our sparse table RMQ in multiple dimension. For each index in the 2D array, we build a 2D sparse table of minimum values spanning the entire region from that index to the bottom-right hand corner (essentially we exponentially scale the size of our region along both x and y axis). This takes $O(mlog(m))$ for one dimension, $O(nlog(n))$ for the other, meaning our total preprocessing runtime for this 2D array will be $O(mnlog(m)log(n))$.\\
+
+For queries, we extend the sparse table idea again. Given an arbitrary query ((i, j), (k, l)), we must pick two regions such that, when they overlap, they cover the distance from i to k exactly, yet also cover the appropriate distance between j and l. Another two regions are needed to fully cover the distance between j and l (as well as from i to k). This means we will need to query four sparse tables and then compare the results for the lowest index, which takes $O(1)$. Therefore, all we need to prove is that finding the bounds for these four regions also takes $O(1)$. We can find the appropriate $k$ in $O(1)$ with $O(mn)$ preprocessing (because its over two dimensions). Therefore we simply use the sparse table algorithm along two dimensions: in the x-direction, the ranges are $[j, j + 2^k - 1]$ and $[d, d - 2^k + 1]$. And in the y-direction, the ranges are $[a, a + 2^k - 1]$ and $[c, c - 2^k + 1]$. Calculating the indexes of these four regions therefore takes $O(1)$, so overall lookup will be $O(1)$.\\
+
+We have thereby proven a data structure for AMQ that runs in $<O(mn log(m)log(n)), O(1)>$.
+
+\end{enumerate}
 
 \newpage
 
@@ -51,11 +61,4 @@ Thus, the time complexity of our hybrid structure is $<O(n\log^{(k)}n), O(1)>$ a
 \end{enumerate}
 
 \end{description}
-
 \end{document}
-
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:
