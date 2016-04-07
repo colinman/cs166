@@ -12,25 +12,10 @@ public class FischerHeunRMQ implements RMQ {
 	float[] block_mins;
 	int[] cartesianCodes;
 	SparseTableRMQ blockRMQ;
-	TreeNode[] cartesianTrees;
+	SparseTableRMQ[] blockRMQArray;
 	Stack<Float> cartesianCodeStack;
-	Stack<TreeNode> cartesianTreeStack;
 	float[] myelems;
-
-	class TreeNode{
-		TreeNode(int idx, float v, TreeNode left, TreeNode right){
-			index = idx;	
-			value = v;
-			leftChild = left;
-			rightChild = right;
-		}
-
-		public int index;
-		public float value;
-		public TreeNode leftChild;
-		public TreeNode rightChild;
-	}	
-
+			
     /**
      * Creates a new FischerHeunRMQ structure to answer queries about the
      * array given by elems.
@@ -39,11 +24,10 @@ public class FischerHeunRMQ implements RMQ {
      */
     public FischerHeunRMQ(float[] elems) {
 		cartesianCodeStack = new Stack<>();
-		cartesianTreeStack = new Stack<>();
 		this.myelems = elems;
 		int n = elems.length;
 		b = (int)Math.floor(Math.log(n)/Math.log(2)) + 1;
-		cartesianTrees = new TreeNode[(int)Math.pow(4, b)];
+		blockRMQArray = new SparseTableRMQ[(int)Math.pow(4, b)];
 
       	int num_mins = (int)Math.ceil(n / b);
      	block_mins = new float [num_mins];
@@ -60,8 +44,9 @@ public class FischerHeunRMQ implements RMQ {
 
 			/* Preprocess Cartesian trees */
 			int cartesian_code = getCartesianCode(i*b, end, elems);
-			if (cartesianTrees[cartesian_code] == null){
-				cartesianTrees[cartesian_code] = buildCartesianTree(i*b, end, elems);
+			if (blockRMQArray[cartesian_code] == null){
+				blockRMQArray[cartesian_code] = 
+					new SparseTableRMQ(Arrays.copyOfRange(elems, i*b, end)); 
 			}
 			cartesianCodes[i] = cartesian_code;
       	}
@@ -99,28 +84,6 @@ public class FischerHeunRMQ implements RMQ {
 		return code;	
 	}
 
-	private TreeNode buildCartesianTree(int start, int end, float[] elems){
-		TreeNode lastNodePopped = null;
-		for (int i = start; i < end; i++){
-			while (!cartesianTreeStack.empty() 
-					&& elems[i] < ((TreeNode)cartesianTreeStack.peek()).value){
-				lastNodePopped = (TreeNode)cartesianTreeStack.pop();
-			}
-			TreeNode newNode = new TreeNode(i - start, elems[i], lastNodePopped, null);
-			lastNodePopped = null;
-	
-			if (!cartesianTreeStack.empty()){
-				((TreeNode)cartesianTreeStack.peek()).rightChild = newNode;	
-			}	
-			cartesianTreeStack.push(newNode);		
-		}
-		/* Clear the stack */
-		while(!cartesianTreeStack.empty()){
-			lastNodePopped = (TreeNode)cartesianTreeStack.pop();
-		}
-		return lastNodePopped; // Root node!	
-	}
-
     /**
      * Evaluates RMQ(i, j) over the array stored by the constructor, returning
      * the index of the minimum value in that range.
@@ -143,17 +106,10 @@ public class FischerHeunRMQ implements RMQ {
 
       	return min_idx;        
 	}
-
+	// i and j are indexes within the particular block
 	private int cartesianMin(int block, int i, int j){
 		System.out.println("Block index: " + block + "   length: " + cartesianCodes.length);	
-		int code_index = cartesianCodes[block];	
-		TreeNode curr = cartesianTrees[code_index];
-		while (curr.index < i || curr.index > j){
-//			System.out.println(curr.value);
-//			System.out.println(curr.value < i);
-			curr = (curr.index < i) ? curr.rightChild : curr.leftChild; 	
-			if (curr == null) System.out.println("Guys I found the problem");
-		}
-		return block * b + curr.index;
+		SparseTableRMQ block_rmq = blockRMQArray[cartesianCodes[block]];
+		return block * b + block_rmq.rmq(i, j);
 	}
 }
