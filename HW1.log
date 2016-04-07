@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  6 APR 2016 21:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  6 APR 2016 23:26
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -625,8 +625,17 @@ Overfull \hbox (26.48222pt too wide) in paragraph at lines 14--14
  [][] 
  []
 
+[1
 
-Overfull \hbox (52.8939pt too wide) detected at line 23
+{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[2]
+Overfull \hbox (52.8939pt too wide) detected at line 32
 \OML/cmm/m/it/10.95 O\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 n \OT1/cmr/m/n/10.
 95 + \OML/cmm/m/it/10.95 p\OT1/cmr/m/n/10.95 ([]) + ([])\OML/cmm/m/it/10.95 p\O
 T1/cmr/m/n/10.95 ([]) + ([])([])\OML/cmm/m/it/10.95 p\OT1/cmr/m/n/10.95 ([]) + 
@@ -635,49 +644,41 @@ T1/cmr/m/n/10.95 ([]) + ([])([])\OML/cmm/m/it/10.95 p\OT1/cmr/m/n/10.95 ([]) +
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 36--37
+Underfull \hbox (badness 10000) in paragraph at lines 45--46
 
  []
 
-[1
 
-{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (46.14415pt too wide) in paragraph at lines 38--39
+Overfull \hbox (46.14415pt too wide) in paragraph at lines 47--48
 []\OT1/cmr/m/n/10.95 Thus, the time com-plex-ity of our hy-brid struc-ture is $
 \OML/cmm/m/it/10.95 < O\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 n [][] n\OT1/cmr
 /m/n/10.95 )\OML/cmm/m/it/10.95 ; O\OT1/cmr/m/n/10.95 (1) \OML/cmm/m/it/10.95 >
 $
  []
 
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
-
-[2] (./HW1.aux) ) 
+[3] [4] (./HW1.aux) ) 
 Here is how much of TeX's memory you used:
  17588 strings out of 493089
  392480 string characters out of 6134842
- 464109 words of memory out of 5000000
+ 465109 words of memory out of 5000000
  20777 multiletter control sequences out of 15000+600000
  9150 words of font info for 33 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 61i,11n,69p,833b,361s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmbx10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmmi10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmmi8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmr10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-17.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.
-pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.p
-fb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
->
-Output written on HW1.pdf (2 pages, 93744 bytes).
+ 61i,11n,69p,833b,440s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmbx10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmmi10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmmi8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmr10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmr12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr17.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr8.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
+10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8
+.pfb>
+Output written on HW1.pdf (4 pages, 96866 bytes).
 PDF statistics:
- 50 PDF objects out of 1000 (max. 8388607)
- 36 compressed objects within 1 object stream
+ 56 PDF objects out of 1000 (max. 8388607)
+ 40 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

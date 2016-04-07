@@ -15,6 +15,15 @@
 
 \begin{description}
 
+\item[Problem 1]\noindent
+In order to calculate the largest value of $k$ for which $2^k \leq j - i + 1$, we can create a table and go through each of the indices sequentially from $1$ to $n + 1$ since those are the only values that $j-i+1$ can take on ($0\leq i,j \leq n$). As we go through these indices, we keep a counter for the $k$ value that the numbers correspond to and insert into the map, starting from $k=0$ for $1$ and incrementing $k$ every time we pass a power of $2$. We can then retrieve the $k$ for any $j-i+1$ with an $O(1)$ map lookup.
+
+\newpage
+
+\item[Problem 2]\noindent
+
+\newpage
+
 \item[Problem 3]\noindent 
 
 \begin{enumerate}[label=\roman*]
