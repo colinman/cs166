@@ -29,6 +29,45 @@
 
 \begin{document}
 
+\section *{Problem 1}
+\begin{enumerate}[i]
+\item    \begin{tabular}{lllll}
+      \cline{2-5}
+            & Lookup & Insert & Delete & Space \\ \cline{2-5} 
+           Array      & $O(\left|w\right|)$      & $O(\left|w\right| + \left|\Sigma\right|)$      & $O(\left| w\right|)$      & $\Theta(N\cdot\left|\Sigma\right|)$     \\
+           BST        & $O(\left|w\right| \log {\left| \Sigma \right|})$      & $O(\left|w\right| \log {\left| \Sigma \right|})$  & $O(\left|w\right| \log {\left| \Sigma \right|})$   & $O(N)$     \\
+           Hash Table & $O(\left|w\right|)$      & $O(\left|w\right|)$      & $O(\left|w\right|)$      &     $O(N\cdot\left|\Sigma\right|)$
+    \end{tabular}
+  
+  \item In order to search the trie for $\sigma(w)$, we begin by using a standard trie lookup to find the node that represents $w$ in the trie. The algorithm can be split into two cases: one in which $w$ is in the trie, and when it is not.\\
+
+If $w$ is in the trie, we find it, and then look in two directions: the children of $w$, and the children of ancestors of $w$. We start by looking at children of $w$. Any child of $w$ must be lexicographically after $w$ due to trie properties: the children of $w$ have $w$ as a prefix. If $w$ has multiple children, we choose the one that is lexicographically before the others. If $w$ has no children we move back to the parent of $w$ and look at its children (excluding $w$) in the same way as before, choosing the one that is lexicographically before the others but after the letter in $w$ represented by how deep we are in the tree. We repeat this process, traversing up parent nodes, until we find a match. \\
+
+If $w$ is not in the trie, we go as far as we can, and then treat the node that we are on as if we were on a ``parent'' node, looking at the children to find one that is lexicographically before the others, but after the letter in $w$ we were looking for during the traversal. We can then continue as in the other case to find a match, traversing up the tree if necessary. \\
+
+The further we traverse back up the tree towards the node, the shorter the prefix shared with $w$, so we are exploring the possibilities in an order such that $\sigma(w)$ will be the successor of $w$. If we reach the root node, check its children, and still cannot find a match, then $w$ does not have a successor.
+\\\\
+Since in the worst case, we can traverse the entire tree, the runtime of this algorithm is $O(N)$ for Array/HashMap implementations and $O(N\log{\left|\Sigma\right|})$ for the BST.
+
+\item 
+\begin{proof}{}
+  Let $T$ be any weight-balanced tree with weight $W$. Since the weight of every node in $T$ is positive, the root is nonzero and must have a weight. Thus, it is not possible for either the right or the left subtree to have the full weight of $W$. It is also not possible for them to have a weight greater than $W$ since $W$ is the total weight of the tree. Thus, there must exist an $0 < \epsilon < 1$ such that each subtree has weight of at most $\epsilon W$. \\\\
+  Among all possible weight-balanced trees, there exists an $\epsilon$ for each. The greatest $\epsilon$ among these trees satisfies the property that for any weight-balanced tree $0 < \epsilon < 1$ and the left subtree and right subtree each have a weight of at most $\epsilon W$. Thus, $\epsilon$ exists.
+\end{proof}
+
+\item \begin{proof}{}
+The lookup operation in this representation consists of walking down the trie and traversing multiple weight-balanced trees (WBT) in the process to follow the trie's edges. Since there are $n$ words in total, the weight of the first WBT that is traversed (representing the children of the root node of the trie) is $n$.\\\\
+We can use our result from (iii) that in any WBT, the weight of both the right subtree and the left subtree is bounded by $\epsilon W$ where $0<\epsilon<1$. As we traverse the trie, the weights of the WBT's traversed become lower and and lower since we must choose one of the children each time and they all have nonzero weights. The weight of the child chosen each time indicates the number of strings that begin with the prefix represented by the node, so it will be the weight of the next WBT searched.\\\\ Note: In the case that the root of the WBT is chosen, we do not have a bound and thus cannot show that the next WBT will be bound by $\epsilon W$, but choosing the root requires no traversal of the WBT and can be done in constant time. Thus, these traversals are summarized as $O(\left|w\right|)$ time.\\\\ For the WBT that require traversal, the size shrinks such that the total traversal time is as follows: 
+\begin{align*}
+  \log{n} + \log{\epsilon n} + \log{\epsilon^2 n} + \cdots
+&= \log\epsilon + \log n + 2\log\epsilon + \log n + \cdots \\
+&= k_1\log n + k_2 = O(\log n)
+\end{align*}
+where the last step follows since $\epsilon$ is a positive constant less than 1, which means that the geometric series using a ratio equal to $\epsilon$ will converge and thus become a constant. We can then sum all the $\log n$ terms to get $O(\log n$ for lookup in the WBTs.\\\\ Including the root case mentioned above as well as the time taken to perform node operations while traversing the trie (at most $\left|w\right|$ nodes), the time becomes $O(\left|w\right| + \log n)$
+\end{proof}
+\item The space usage of the static trie is $O(N)$ since each of the nodes in the WBTs correspond to an edge on the trie and there are $N$ nodes on the trie. Each edge connects two nodes, making this bound possible. 
+\end{enumerate}
+
 \section *{Problem 2}
 \begin{enumerate}[i]
     \item 
@@ -70,6 +109,22 @@ Because this verification starts at every index $i$ in $T$, if a solution exists
 We will now prove the runtime of this algorithm. In order to run $LCE$, we must preprocess the strings $T$ and $P$, which takes linear time: $O(m + n)$. However, $LCE$ itself runs in constant time. When we run our algorithm, we look at $O(m)$ starting indexes in $T$, and evaluate each potential matching substring in $O(k)$. It must be $O(k)$ because $LCE$ runs in $O(1)$ time and we can run $LCE$ a maximum of $k$ times before we exceed the allowed error count. Therefore, running the entire algorithm will take $O(mk)$. Adding in preprocessing, we get a final runtime of $O(mk + n)$.
 \end{proof}
 
+\section *{Problem 4}
+\begin{enumerate}[i]
+\item DC2 does not always compute the suffix array in $O(m)$ since there could arise a case in which during the merging phase in which two suffixes have many of the same letters but we only have relative rankings in different sets ($T_0$ and $T_1$ for example). These sets can't be compared, so we need to extend our suffixes for an indeterminate number of letters until we can successfully compare the prefixes. In DC3, extending the relative rankings checked will guarantee that we get relative rankings in the same domain since there is only one $T_0$ for two $T_1$ and $T_2$. This places an $O(1)$ bound on comparing any two suffixes in the merge phase, but does not hold for DC2.
+\item DC4 works the same way as DC3 would, but with initial metacharacters that contain four characters each and an initial sort of $T_1, T_2, T_3$, leaving $T_0$ to the second phase. The sorting in both phase 1 and phase 2 work correctly regardless of the number of relative ranking sets. The merge phase is also guaranteed to find relative rankings from the same set between any two suffixes in $O(1)$ time unlike DC2. This is because there are many more in the $T_1, T_2, T_3$ set than there are in the $T_0$ one. The recurrence relation is \[
+    R(m) = R(3m/4) + O(m)
+\]
+
+Using Master Theorem, we have $\log_b a = \log_4 1 = 0$ so $f(m) = O(m) = \Omega(m^{.5})$ where $c=.5 > 0$. We also have $O(\frac{m}{4}) \leq kO(m)$ for $k=1$. Thus, this is a Case 3 equation, and we can conclude that $R(m) = \Theta(m)$ and that DC4 correctly computes a suffix array in $O(m)$  time.
+ 
+\end{enumerate}
+
 \end{document}
 
 
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
