@@ -1,0 +1,75 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[]{amsmath}
+\usepackage{amsthm,amssymb}
+\usepackage{enumerate}% http://ctan.org/pkg/enumerate
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{ mathrsfs}
+\usepackage[margin=0.5in]{geometry}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+% no indents pls
+\setlength\parindent{0pt}
+
+
+%%% defs for theorem environments
+\renewcommand{\qedsymbol}{\rule{0.7em}{0.7em}} % black box for QED
+\newtheorem*{thm}{Theorem}
+\newtheorem{lem}{Lemma}
+%defining style for Cases
+\newtheoremstyle{casestyle}{\topsep}{1pt}{}{0pt}{\itshape}{.}{5pt plus 1pt minus 1pt}{}
+\theoremstyle{casestyle}
+\newtheorem{case}{Case}
+%smallcaps-ing "Proof" header
+\let\oldproofname=\proofname
+\renewcommand{\proofname}{\rm\sc{\oldproofname}}
+
+\begin{document}
+
+\section *{Problem 2}
+\begin{enumerate}[i]
+    \item 
+    Because there is only one pattern string, our automaton will be in the shape of a line. (Think linked-list)
+
+    \item 
+    We need trie edges because we still need to advance character by character. We still need suffix links because suffixes can still be preserved within the same string on a mismatch. For example, if we look for "ababe" in "abababab" we will match up to index $4$ and fail when 'e' is compared with 'a'. Instead of falling back to index $0$, we can fall back to index $2$ and preserve the suffix "ab" so we don't miss anything.\\
+    
+    However, we don't need output links. Output links only fix the case where there are multiple pattern strings that are substrings of each other. Because we only deal with a single pattern string, this is not a problem.\\
+    
+    \item 
+    See code.
+    
+    \item 
+    Let $P$ be the pattern string. We chose to represent the matching automaton as an array of integers $A$ with a length $1$ greater than $length(P)$. This way, each index in $A$ corresponds to a node in the automaton. The associated character of every trie link can be accessed by indexing into $P$ based on your current index in $A$. This makes moving to the next node along the trie links very easy - just increment your current index in $A$. The values in $A$ correspond to suffix links. That is, the value of $A[i]$ is the index of the node pointed to be node $i$'s suffix pointer (this also means that $A[i] < i$). Therefore, by utilizing $P$ and $A$, we can access all the necessary information to perform string matching.\\
+    
+    
+\end{enumerate}
+
+
+\section *{Problem 3}
+Let $LCE_{S_1, S_2}(i, j)$ be the length of the longest common prefix between any two strings $S_1$ and $S_2$ starting at positions $i$ and $j$. Our solution to the k-approximate matching problem will utilize the Longest Common Extension solution present in lecture.\\
+
+Our solution for the k-approximate matching problem, where $T$ is the text string and $P$ is the query string:\\
+
+Keep an error count $C$. For every character position $i$ in $T$, calculate $L_1 = LCE_{T, P}(i, 0)$ using the algorithm presented in lecture. If $L_1 < length(P)$, increment the error count $C$ and calculate $L_2 = LCE_{T, P}(i + L_1 + 1, L_1 + 1)$. Note that this essentially skips the mismatched character, utilizing one of our $k$-allowed mismatch errors. If $C + L_1 + L_2$ is still $< length(P)$, skip the mismatched character and calculate the next $LCE$ and so on. Repeat this process until either:\\
+$1)$ The total length of the extensions $(C + L_1 + L_2 + ...) >= length(P)$. Return true because we have found a appropriate solution.\\
+$2)$ The error count $C$ exceeds the allowed $k$ or we run off the end of $T$ before $>= length(P)$ consecutive characters have been matched. Then, move on to the next character position $i$. If every character position $i$ in $T$ is evaluated without success, we return false.\\
+
+\begin{proof} 
+We will first prove the correctness of this algorithm. Let $T[i:j]$ be the notation for the substring of $T$ starting at index $i$ and ending at $j$ (for convenience, if $j > length(T)$ just stop the substring at the end of $T$).\\
+
+For a given character index $i$ in $T$, if $T[i:i+length(P)]$ is the correct match for $P$, then $T[i:i+length(P)]$ will match exactly with $P$ with at most $k$ character mismatches. We do exactly this with our $LCE$ construction. By definition, $LCE$ counts the number of consecutive matching characters until a mismatch occurs. And when a mismatch occurs, we simply increment our error count and skip past the offending mismatch, rerunning $LCE$ starting at the new index. Therefore, we are guaranteed that if $T[i:i+length(P)]$ is a correct match for $P$, the sum of the lengths returned by our $LCE$ calls and the mismatches we skipped over (tallied in our error count) will be $>= length(P)$, which is our success condition. On the other hand, we are also guaranteed that if $T[i:i+length(P)]$ is not a correct match of $P$, the error count will exceed the allowed $k$ (or we run off the end of $T$) before we finish matching the entire string, which is our failure condition.\\
+
+Because this verification starts at every index $i$ in $T$, if a solution exists, we are guaranteed to find it. And if a solution does not exist, we will fail at every $i$ and eventually return false. Therefore, our algorithm will yield the correct answer.
+\end{proof}
+
+\begin{proof}
+We will now prove the runtime of this algorithm. In order to run $LCE$, we must preprocess the strings $T$ and $P$, which takes linear time: $O(m + n)$. However, $LCE$ itself runs in constant time. When we run our algorithm, we look at $O(m)$ starting indexes in $T$, and evaluate each potential matching substring in $O(k)$. It must be $O(k)$ because $LCE$ runs in $O(1)$ time and we can run $LCE$ a maximum of $k$ times before we exceed the allowed error count. Therefore, running the entire algorithm will take $O(mk)$. Adding in preprocessing, we get a final runtime of $O(mk + n)$.
+\end{proof}
+
+\end{document}
+
+
