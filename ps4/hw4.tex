@@ -1,0 +1,139 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[]{amsmath}
+\usepackage{amsthm,amssymb}
+\usepackage{enumerate}% http://ctan.org/pkg/enumerate
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{ mathrsfs}
+\usepackage{ mathtools}
+\usepackage[margin=0.5in]{geometry}
+
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+% no indents pls
+\setlength\parindent{0pt}
+
+
+%%% defs for theorem environments
+\renewcommand{\qedsymbol}{\rule{0.7em}{0.7em}} % black box for QED
+\newtheorem*{thm}{Theorem}
+\newtheorem{lem}{Lemma}
+% defining style for Cases
+\newtheoremstyle{casestyle}{\topsep}{1pt}{}{0pt}{\itshape}{.}{5pt plus 1pt minus 1pt}{}
+\theoremstyle{casestyle}
+\newtheorem{case}{Case}
+% smallcaps-ing "Proof" header
+\let\oldproofname=\proofname
+\renewcommand{\proofname}{\rm\sc{\oldproofname}}
+
+\begin{document}
+
+\section *{Problem 1}
+We will describe an algorithm using three stacks that implements all four deque methods in $O(1)$. Let the stacks be named FRONT, AUX, and BACK. We will also keep a global counter $n$ for how many total elements are in our data structure. \\
+
+add-to-front($x$): pushes $x$ onto FRONT and increments $n$. \\
+add-to-back($x$): pushes $x$ onto BACK and increments $n$. \\
+remove-front(): if FRONT is not empty, pop and return the top element of FRONT. If both FRONT and BACK are empty, throw an error. However, if only FRONT is empty, pop all $n$ elements from BACK into the other two stacks. The first $\floor*{n/2}$ elements popped go into AUX and the next $\ceil*{n/2}$ elements go into FRONT. Next, pop all $\floor*{n/2}$ elements from AUX back into BACK. Pop and return the topmost element from FRONT and decrement $n$. \\
+remove-back(): mirrors remove-front() exactly, except we switch the roles of FRONT and BACK.\\
+
+\begin{proof} Of Correctness.\\
+  Instead of keeping track of all $n$ elements in a contiguous, array-like structure, our data structure splits this array into its front part (stored in FRONT) and its back part (stored in BACK). When the front part runs out of elements and remove-front() is called, we redistribute the elements from the back part. The same logic applies to when the back part runs out of elements and remove-back() is called. Therefore, FRONT must always contain all elements from the front part such that popping FRONT removes the first element of our deque. Likewise, BACK must contain all elements from the back part such that popping BACK removes the last element of our deque. We will now show that all four functions preserve the above requirements. \\
+
+  add-to-front($x$): pushing $x$ onto FRONT ensures that it will be the first element removed when FRONT pops again because of the LIFO property of stacks. The exact same logic applies to BACK for add-to-back($x$).\\
+
+  remove-front(): if front and back are both empty, then the deque must be empty because nothing pushed (added) into it - so throwing an error is correct. If there are elements in FRONT, the front element of our deque will be the first element popped from FRONT due to the LIFO property of a stack. However, if FRONT is empty, we know that all the elements in our deque reside in BACK. We want the elements at the front of the back part, meaning the bottom part of the BACK stack. Therefore, moving the first $\ceil*{n/2}$ popped elements from BACK to AUX serves to clear the way for the front half of our back portion to be removed and pushed into FRONT. Because elements from BACK are removed in reverse order (back-to-front), they are inserted into FRONT in reverse order, preserving our deque order (front element = first popped from FRONT). Lastly, we fill BACK back up with the elements in AUX. Because we have popped and pushed these elements twice, their order remains the same. Therefore, BACK stays exactly the same in terms of correctness, although it has lost the bottom half of its elements. We can now safely remove from FRONT, knowing that our deque integrity is preserved. The exact same (mirrored) logic applies to BACK for remove-back().\\
+\end{proof}
+
+\begin{proof} Of Runtime.\\
+  We will prove that each operation runs in amortized $O(1)$ time. For our potential function, we will use three times the difference between the number of elements in FRONT and BACK. We see that both add-to-front($x$) and add-to-back($x$) run in constant amortized time, because pushing onto a stack is $O(1)$ and the potential can  increase or decrease by at most $3 * 1$ (depending on whether the difference is exacerbated or suppressed). \\
+
+  When the elements are present, remove-front() and remove-back() take $O(1)$ (popping a single element from a stack) and increases or reduces the potential by exactly $3 * 1$. However, when remove is called on an empty stack, significantly more work has to be done. Luckily, if this ever happens, we are guaranteed to have enough potential energy to perform this operation in amortized $O(1)$ time. W.L.G, if remove() is called on an empty FRONT, the amount of potential we have is equivalent to $3 * n$ (where $n$ is the number of elements in BACK). In our redistribution algorithm, we push $\floor*{3/2 * n}$ times and pop $\ceil*{3/2 * n}$ times, with a total operation count of $3 * n$. This is exactly the potential we have saved up! Also note that after redistribution, the potential drops to $<= 1$. Therefore, we will always be able to "pay" for redistribution with the potential we accumulated from additions, so any redistribution also runs in $O(1)$ amortized time. \\
+
+  We have thus shown an algorithm using three stacks to implement a deque, where all four required operations are completed in $O(1)$ amortized time. \\
+
+  \section *{Problem 2}
+
+  We can construct a Fibonacci heap given an order $k$ and minimum number of nodes $m$ by inserting $2^{\ceil{\log_2 (m+1)}}+1$ nodes and then calling extract-min once to consolidate the trees. This results in a heap with $2^{\ceil{\log_2 (m+1)}}$ nodes that consists of one node with child subtrees of order $0 \dots \ceil{\log_2 (m+1)}-1$. Since the number of nodes is $2^{\ceil{\log_2 (m+1)}} \geq m$ nodes. We can then find the minimum key $s$ of the tree and call decrease-key on the roots of the child trees starting from the child tree of order $0$, then order $1$, $2$, etc. for $k-1$ times, setting the roots of the trees to $s-1$. Since $s-1$ is guaranteed to be lower than the root of the tree, this will cause the children Fibonacci heaps to be cut off and increase the order of the overall Fibonacci heap by one every time. We can do this $k-1$ times until we have a Fibonacci heap of order $k$ with more than $m$ nodes, as desired.\\\\ Note that we are taking out children subtrees from the root node since if we attempt this process at any other level, we may inadvertently create more trees because a node who has lost two children must also be cut off.
+
+  % We can show that there is no upper bound on the number of nodes in the tree with a fixed $k$ via induction. Given a Fibonacci heap of any size with an order $k$ and number of nodes $n$, we can create another Fibonacci heap of order $k$ containing at least $n+1$ nodes. \\\\
+
+  % Base Case. Given any $k$, we can construct a Fibonacci heap of order $k$ by inserting $2^k$ nodes. After constructing the heap of desired order, we call extract-min once to consolidate branches, giving $2^k-1$ nodes and one child tree of each order from $0$ to $k-1$. \\\\
+
+  % Inductive Step. We will show that given a tree of order $k$ with $n$ nodes and child binomial trees of order $i$ through $i+k-1$, we can perform operations on it to create a tree with at least $n+1$ nodes of order $j$ through $j+k-1$. \\ We can achieve this by taking the 
+
+
+
+  % We can find the value of the smallest node in the tree $s$ and decrease the key of any non-root node to $s-1$ (if there is only one node in the tree, we can move directly to phase 2, treating the single node as if it were ``cut off''). This will cause at least one node to be cut off of the tree since there is no node with a value lower than $s$ before the decrease operation (i.e. its parent must have a value greater than $s-1$). \\\\
+
+  % Phase 2.
+
+  % We then insert a 
+
+  \newpage
+
+
+  \section *{Problem 3}
+
+  We begin with a lazy binomial heap and perform modifications in order to achieve our desired  amortized runtime of new-pq, insert, find-min, meld, and add-to-all in amortized time $O(1)$ and extract-min in $O(\log n)$. We will design around the function add-to-all since it is the major addition to our data structure.\\
+
+  In order to achieve amortized constant time melds, we also introduce a separate, auxiliary binomial heap that will keep track of the melded queues and the minimum elements of those queues at all times. For clarity, we will refer to this auxiliary heap as $A$ and the overall structure that we are building as $B$. The nodes in $A$ will have keys representing the value of the minimum element of each queue that was melded to $B$ and values that are pointers to the elements themselves. Operations on $A$ are standard lazy binomial heap operations as outlined in lecture.\\
+
+  We introduce the notion of an augmented property $d$ on each node of $B$ that starts initially at $0$. This field is an integer that represents the add-to-all $\Delta k$ values that have been added to the priority of the node and all its children over its lifetime. In addition, we keep a counter $c$ with an initial value of 0 in $B$ to keep track of add-to-all's that have been performed to $B$ overall. For example, a node (with no parents) with $d=3$ and priority $2$ has an effective priority of $3+2+2=7$ if $c$ is $2$ for the queue that it is in and its children's priorities are also effectively $d+c=3+2$ higher. \\
+
+  These operations assume that they are being performed on a data structure $B$ with auxiliary heap $A$.\\\\
+  \textbf{new-pq}: Initialize an empty binomial heap for $A$ and $B$. No nodes are on either heap. \\\\
+  \textbf{insert}$(v,k)$: Create a node $n_1$ with value $v$, key $k$, and aux value $d=-c$ (since the effective priority of every element in $B$ is actually $k+d+c$). Append this element to the end of the linked list of roots in $B$. Update the min pointer (as in a normal lazy binomial heap) for $B$ if the value $k+d$ of the new node is less than the $k+d$ node that the min pointer is pointing at.\\\\
+  \textbf{find-min}: Perform find-min on $A$ to get the node with the lowest key, $n$. Compare $n.k+n.d+n.pq.c$ to the $k+d+c$ of the node pointed to by the min pointer and return the node with the lower value (amending it with the correct priority for the client).\\\\
+  \textbf{meld}$(B,pq\_2)$: Insert the minimum element of $pq_2$ (using find-min to get) into $A$ (this element is actually a wrapper that includes a reference to $pq_2$, as can be seen by accesses to a $pq$ property in find-min, but we abstract this away in the overview). Subtract $c$ from $pq_2.c$ to account for the counter. Return $B$ as the new tree.\\\\
+  \textbf{add-to-all}$(s)$: Set $c$ to $c + s$.  \\\\
+  \textbf{extract-min}: \\ Phase 1: Extraction. Find the minimum element $n_a$ in $A$ and compare it to the node pointed to by the min pointer (as in find-min). Let this node be $n$. Take the root trees of the queue that contains $n$ (this information is stored in $A$ as well) and add $n.d$ to the children's auxiliary values ($d$-values) (i.e. increment/decrement the auxiliary priority of the children by the auxiliary priority of the root). Take these children and append them to the linked list of root nodes in $B$. For each of the melded queues in $A$, add its root trees to the linked list in $B$ as well (excluding the tree that has $n$ as the root if $n$ was taken from $A$). Add the $c$ value of theses root trees' original queues to the root trees' d-values to account for the counter. $A$ can then be cleared. \\\\ Phase 2: Merge. We can now merge the trees that are in the linked list of $B$ as demonstated in lecture 8: by creating space for $O(\log n)$ trees and then assigning and merging trees based on their size (removing them from the linked list), a standard lazy binomial operation. When the merging in the binomial heap occurs, we have two trees: $T_1$ and $T_2$ that must be merged. Without loss of generality, let $T_1$ have a lower $k+d$ value. We must maintain accuracy of the $d$ fields stored in the node, so we set $T_2.d = T_2.d - T_1.d$ and let $T_1$ be the root of the new merged tree. This occurs on every tree merge operation to preserve the accuracy of $d$ at the root. At the end of \textbf{extract-min} and its merging, there will be only $O(\log n)$ trees.\\
+
+  This series of operations allows us to maintain the node with the lowest priority at the top of the heap while offering operations such as add-to-all and meld in amortized constant time. Since the counter values and auxiliary $d$ values are propagated to the children every time the minimum node is extracted/replaced, we maintain correct functionality. Since everything in $B$ is subject to a shift by $c$, we can do add-to-all easily as well. \\
+
+  \begin{proof} of Runtime
+    In order to prove amortized runtime, we use a potential function $\phi=\text{\# nodes in } A + \text{\# trees in } B$. Let $T_A$ be the number of nodes in $A$ and $T_B$ be the number of root trees in $B$. The potential function thus becomes $\phi=T_A+T_B$  \\
+    \textbf{new-pq}: $O(1)$ actual. No potential change. $O(1)$.\\\\
+    \textbf{insert}$(v,k)$: $O(1)$ actual (adding to linked list). $\Delta \phi = 1$ since one node is added to $B$ as a new tree. Amortized cost: $O(1) + O(1) = O(1)$.\\\\
+    \textbf{find-min}: $O(1)$ actual (since $A$ is a lazy binomial heap, we can use $O(1)$ here as ``actual'' even though part of it is amortized). $\Delta \phi = 0$ since no trees are added and $A$ is not changed. Amortized cost: $O(1)$\\\\
+    \textbf{meld}$(B, p q_2)$: $O(1)$ actual (add to $A$, subtract counter). $\Delta \phi = 1$ since one node is added to $A$.  Amortized cost: $O(1) + O(1) = O(1)$. \\\\
+    \textbf{add-to-all}$(s)$: $O(1)$ actual (updating $c$). $\Delta \phi = 0$ since no trees are added. Amortized cost: $O(1)$.\\\\
+    \textbf{extract-min}: \\\\ Actual $O(1)$ (find minimum) + $O(\log n)$ (exposing children on extract and changing their d values) + $O(\text{\# trees in} B)$ (merge trees) + $O(\text{\# nodes in} A)$ (merge melded heaps). $\Delta \phi = -T_A-T_B + O(\log n)$ (remove $T_A$ nodes from $A$, remove $T_B$ trees from $B$, create O($\log n$) of them after merging). \\\\ Amortized: $O(1) + O(\log n) + O(T_A) + O(T_B) + O(1) \cdot (-T_A - T_B + O(\log n)) = O(1) + O(\log n) + O(\log n) = O(\log n)$
+  \end{proof}
+
+  \newpage
+
+  \section*{Problem 4}
+
+  \begin{proof}
+    Let us model this algorithm as a tree, where each node represents the center node of a single recursive step. The left subtree of this node is the recursive tree resulting from doing the same thing on the array of elements less than the center node but still in this particular recursive range. The right subtree follows the same definition. Note that for any node $m$ in this recursive tree, $min(number of nodes in m's left subtree, number of nodes in m's right subtree) + 1$ represents the amount of scanning we need to find $m$, because we have two pointers scanning from either end, so not all elements are necessarily scanned. \\
+
+    We will first show that, if this recursive tree is a perfectly balanced binary search tree (it is a BST already by construction, actually), the runtime of our algorithm will be $O(nlog(n))$. In order to construct a perfectly balanced tree, we must pick the node in the center of the array each time, which means we must scan all $n$ total elements with our pointers. Therefore, our recurrence for the runtime would be $T(n) = 2 * T(n/2) + n$, which is exactly the same recurrence as mergesort = resulting in a runtime of $O(nlog(n))$. \\
+
+    Lastly, we will show that the algorithm that results in a perfectly balanced tree is actually the worst case that we could possibly have. For the purposes of our proof, we will only work with recursive trees (and therefore input lengths) that have $2^k$ nodes for some $k$. If some input length does not have $2^k$ nodes, we can simply extend the size of the array to the next power of two. The runtime for larger array cannot be smaller than the runtime for a smaller array, so any bounds we prove on arrays of size $2^k$ will how for all arrays. This also means that a perfectly balanced recursive tree is complete.
+
+    By contradiction, assume that $T$ is a recursive tree that is not perfectly balanced, and represents the worst-case runtime of our algorithm. Because $T$ has $2^k$ elements, it is not complete and therefore there are at least two nodes $m_1$ and $m_2$ in $T$ that have only one child. Therefore, the time taken to scan and find either $m_1$ or $m_2$, as defined above, is $min(1, 0) + 1 = 1$. However, if we remove the child of $m_1$ and add it to $m_2$ as the second child, we get zero child for $m_1$ and two children for $m_2$. The scan time for $m_1$ stays the same: $min(0, 0) + 1 = 1$, but the scan time for $m_2$ increases due to the extra child: $min(1, 1) + 1 = 2)$. Therefore, the overall runtime of the algorithm will increase, which is a contradiction.\\
+
+    Therefore, the worst-case runtime comes from a recursive tree that is perfectly balanced. As show above, however, the runtime of a perfectly balanced tree is $O(nlog(n))$, so the overall runtime of this algorithm must be $O(nlog(n))$.\\
+  \end{proof}
+
+\end{proof}
+
+
+\end{document}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "cs166 HW4"
+%%% End:

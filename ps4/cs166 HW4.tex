@@ -77,7 +77,7 @@ In order to prove amortized runtime, we use a potential function $\phi=\text{\# 
 \textbf{find-min}: $O(1)$ actual (since $A$ is a lazy binomial heap, we can use $O(1)$ here as ``actual'' even though part of it is amortized). $\Delta \phi = 0$ since no trees are added and $A$ is not changed.\\\\
 \textbf{meld}$(B,pq_2)$: $O(1)$ actual (add to $A$, subtract counter). $\Delta \phi = 1$ since one node is added to $A$. \\\\
 \textbf{add-to-all}$(s)$: $O(1)$ actual (updating $c$). $\Delta \phi = 0$ since no trees are added.\\\\
-\textbf{extract-min}: \\\\ Actual $O(1)$ (find minimum) + $O(\log n)$ (exposing children on extract) + $O(\text{\# trees in} B)$ (merge trees) + $O(\text{\# nodes in} A)$ (merge melded heaps). $\Delta \phi = -T_A-T_B + O(\log n)$ (remove $T_A$ nodes from $A$, remove $T_B$ trees from $B$, create O($\log n$) of them after merging). \\\\ Amortized: $O(1) + O(\log n) + O(T_A) + O(T_B) + O(1) \cdot (-T_A - T_B + O(\log n)) = O(1) + O(\log n) + O(\log n) = O(\log n)$
+\textbf{extract-min}: \\\\ Actual $O(1)$ (find minimum) + $O(\log n)$ (exposing children on extract and adding d to children aux values) + $O(\text{\# trees in} B)$ (merge trees) + $O(\text{\# nodes in} A)$ (merge melded heaps). $\Delta \phi = -T_A-T_B + O(\log n)$ (remove $T_A$ nodes from $A$, remove $T_B$ trees from $B$, create O($\log n$) of them after merging). \\\\ Amortized: $O(1) + O(\log n) + O(T_A) + O(T_B) + O(1) \cdot (-T_A - T_B + O(\log n)) = O(1) + O(\log n) + O(\log n) = O(\log n)$
 \end{proof}
 
 \end{document}
