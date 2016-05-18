@@ -61,7 +61,6 @@ void SplayTree::link_left() {
 	if (l != NULL) l->right = t;
 	else root_L = t; 
 
-	prev_l = l;
 	l = t;
 	t = t->right;
 }
@@ -157,7 +156,6 @@ bool SplayTree::contains(int key) {
 	root_R = NULL;
 	l = NULL;
 	r = NULL;
-	prev_l = NULL;	
 
 	while (t != NULL && t->key != key) {
 		if (key < t->key) {

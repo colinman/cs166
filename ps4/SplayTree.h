@@ -42,7 +42,6 @@ private:
 	struct node *root_R;
 	struct node *l;
 	struct node *r;
-	struct node *prev_l;
 
 	bool test_flag;
 
