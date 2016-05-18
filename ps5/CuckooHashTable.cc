@@ -3,7 +3,7 @@
 
 int *createInitialHashTable(size_t numBuckets) {
 	int *table = new int[numBuckets];
-	for (int i = 0; i < numBuckets; i++)
+	for (size_t i = 0; i < numBuckets; i++)
 		table[i] = -1;
 	return table; 
 }
@@ -40,7 +40,7 @@ void CuckooHashTable::rehash() {
 	right_table = createInitialHashTable(numBuckets);
 	left_table = createInitialHashTable(numBuckets); 
 
-	for (int i = 0; i < numBuckets; i++) {
+	for (size_t i = 0; i < numBuckets; i++) {
 		if (old_left_table[i] >= 0) insert(old_left_table[i]); 
 		if (old_right_table[i] >= 0) insert(old_right_table[i]); 
 	}

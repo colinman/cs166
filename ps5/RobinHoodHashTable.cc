@@ -75,7 +75,7 @@ void RobinHoodHashTable::remove(int data) {
 	if (index >= 0) {
 		while (true) {
 			int next_index = (index + 1) % numBuckets;
-			if (next_index == table[next_index].intended_bucket){
+			if (next_index == (int)table[next_index].intended_bucket){
 				table[index].data = -1;
 				break;
 			}
