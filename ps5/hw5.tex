@@ -1,0 +1,148 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[]{amsmath}
+\usepackage{amsthm,amssymb}
+\usepackage{enumerate}% http://ctan.org/pkg/enumerate
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{ mathrsfs}
+\usepackage{mathtools}
+\usepackage[margin=0.5in]{geometry}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+% no indents pls
+\setlength\parindent{0pt}
+
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+%%% defs for theorem environments
+\renewcommand{\qedsymbol}{\rule{0.7em}{0.7em}} % black box for QED
+\newtheorem*{thm}{Theorem}
+\newtheorem{lem}{Lemma}
+% defining style for Cases
+\newtheoremstyle{casestyle}{\topsep}{1pt}{}{0pt}{\itshape}{.}{5pt plus 1pt minus 1pt}{}
+\theoremstyle{casestyle}
+\newtheorem{case}{Case}
+% smallcaps-ing "Proof" header
+\let\oldproofname=\proofname
+\renewcommand{\proofname}{\rm\sc{\oldproofname}}
+
+\begin{document}
+
+\section *{Problem 1}
+\begin{enumerate}[a)]
+\item We can show that $E[C^2]=F_2$ as follows: 
+\begin{align*}
+  C &= \sum_{i=1}^na_iH(x_i) \\
+  E[C^2] &= E\left[\sum_{i=1}^n\sum_{j=1}^na_ia_jH(x_i)H(x_j)\right]\\
+  E[C^2] &= \sum_{i=1}^n\sum_{j=1}^nE\left[a_ia_jH(x_i)H(x_j)\right]
+\end{align*} 
+We first note that $E[a_iH(x_i)]$ is $0$ since there is equal probability that $H(x_i)$ is $-1$ and $1$. We will use this fact throughout this problem. We can see that if $i \neq j$, then the terms are independent (since $\mathscr{H}$ is 2-independent and $a$ of each element is independent of each other)
+\begin{align*}
+  E\left[a_ia_jH(x_i)H(x_j)\right] &= E[a_iH(x_i)]E[a_jH(x_j)]\text{ if }i\neq j \\
+&= 0 \cdot 0 = 0
+\end{align*}
+Thus, the expression evaluates to
+\begin{align*}
+  E[C^2] &= \sum_{i=1}^n\sum_{j=1}^nE\left[a_ia_jH(x_i)H(x_j)\right] \\
+         &= \sum_{i=1}^nE\left[a_ia_iH(x_i)H(x_i)\right]\\
+         &= \sum_{i=1}^nE\left[a_i^2\right] \\
+         &= \sum_{i=1}^na_i^2 = F_2
+\end{align*} 
+
+\item We can bound the variance as follows:
+\begin{align*}
+  \mathrm{Var}(C^2) &= E\left[ C^4 \right] - E\left[ C^2 \right]^2 \\
+            &= E\left[ C^4 \right] - F_2^2 \\
+\end{align*}
+Looking at the first term individually, we have
+\begin{align*}
+  E\left[ C^4 \right] &= E\left[\sum_{i=1}^n\sum_{j=1}^n\sum_{k=1}^n\sum_{l=1}^na_ia_ja_ka_lH(x_i)H(x_j)H(x_k)H(x_l)\right]\\
+                      &= \sum_{i=1}^n\sum_{j=1}^n\sum_{k=1}^n\sum_{l=1}^nE\left[a_ia_ja_ka_lH(x_i)H(x_j)H(x_k)H(x_l)\right]
+\end{align*}
+We can see that for any $i\neq j$, $i\neq k$, and $i\neq l$, we can treat the terms involving the index $i$ as independent since $\mathscr{H}$ is 4-independent and $a$ of every element is independent of each other:
+\begin{align*}
+  \sum_{i=1}^n\sum_{j=1}^n\sum_{k=1}^n\sum_{l=1}^nE\left[a_ia_ja_ka_lH(x_i)H(x_j)H(x_k)H(x_l)\right] &= \sum_{i=1}^nE\left[a_iH(x_i)\right]\sum_{j=1}^n\sum_{k=1}^n\sum_{l=1}^nE\left[a_ja_ka_lH(x_j)H(x_k)H(x_l)\right] \\ &= 0 \cdot \sum_{j=1}^n\sum_{k=1}^n\sum_{l=1}^nE\left[a_ja_ka_lH(x_j)H(x_k)H(x_l)\right] \\ &= 0
+\end{align*}
+Thus, we can eliminate (as in lecture) any terms that have one different element or three of the same elemement (since that implies one different element). This leaves us with the terms that contain either all different elements or two pairs of elements. \[
+  \sum_{i=1}^nE\left[ (a_iH(x_i))^4 \right] + {4 \choose 2}\sum_{i=1}^n\sum_{j=i+1}^nE\left[ (a_iH(x_i))^2(a_jH(x_j))^2 \right]
+\]
+where the first term represents all the terms in the original summation with all distinct $i,j,k,l$ and the second represents the terms with two pairs of elements (sum of all pairs times 4 choose 2 permutations of them). We can then simplify as shown in lecture (converting second inner summation from [i+1, n] to [1,n] with $i\neq j$ and doubling):
+\begin{align*}
+  \sum_{i=1}^nE\left[ (a_iH(x_i))^4 \right] + 6\sum_{i=1}^n\sum_{j=i+1}^nE\left[ (a_iH(x_i))^2(a_jH(x_j))^2 \right] &= \sum_{i=1}^nE\left[ (a_iH(x_i))^4 \right] + 3\sum_{i\neq j}E\left[ (a_iH(x_i))^2(a_jH(x_j))^2 \right] \\&= \sum_{i=j}E\left[ (a_iH(x_i))^2(a_jH(x_j
+))^2 \right] + 3\sum_{i\neq j}E\left[ (a_iH(x_i))^2(a_jH(x_j))^2 \right] \\ &\leq 3(\sum_{i=1}^nE\left[ (a_iH(x_i))^2 \right])^2
+\end{align*}
+where the last step follows since $\sum_{i=j}E\left[ (a_iH(x_i))^2(a_jH(x_j
+  ))^2 \right] + \sum_{i\neq j}E\left[ (a_iH(x_i))^2(a_jH(x_j))^2 \right] = (\sum_{i=1}^nE\left[ (a_iH(x_i))^2 \right])^2$ due to 4-independence of $\mathscr{H}$ and $a$. This bound is similar to the one in lecture 12. We can then continue to simplify:
+\begin{align*}
+  3(\sum_{i=1}^nE\left[ (a_iH(x_i))^2 \right])^2 &= 3(\sum_{i=1}^nE\left[ a_i^2 \right])^2 \\
+                                                &= 3(\sum_{i=1}^n(a_i^2))^2 \\
+                                                &= 3F_2^2
+\end{align*}
+Taking it back to the original expression, we have
+\begin{align*}
+  \mathrm{Var}(C^2) &= E\left[ C^4 \right] - F_2^2 \\
+                    &\leq 3F_2^2-F_2^2\\
+                    &= 2F_2^2 
+\end{align*}
+
+\item Chebyshev's inequality is as follows: \[
+    Pr \left(\left|x-\mu\right| \geq c\sigma \right) \leq \frac{1}{c^2}
+  \] If we let $x$ be $C^2$, then $\mu$ is $F_2$ $\sigma^2 \leq 2F_2^2$, and $\sigma \leq \sqrt{2}F_2$ This gives us the following \[
+    Pr \left(\left|C^2-F_2\right| \geq c\sqrt{2}F_2 \right) \leq \frac{1}{c^2}
+  \] If we let $c=\frac{\epsilon}{\sqrt{2}}$ we have \[
+    Pr \left(\left|C^2-F_2\right| \geq \epsilon F_2 \right) \leq \frac{2}{\epsilon^2}
+  \] This isn't a particularly useful bound because in order for the bounding probability to be less than $1$, $\epsilon$ has to be at least $\sqrt{2}$. We want to be able to bound the probability to a certain value given any $\epsilon$.
+
+\item We can show expectance as follows:
+\begin{align*}
+  E[D] &= E\left[\frac{1}{w}\sum_{i=1}^wC_i^2\right] \\ 
+       &= \frac{1}{w}E\left[\sum_{i=1}^wC_i^2\right] \\ 
+       &= \frac{1}{w}\sum_{i=1}^wE\left[C_i^2\right] \\ 
+       &= \frac{1}{w}w\cdot F_2\right] \\
+       &= F_2
+\end{align*} We can show variance as follows:
+\begin{align}
+  \mathrm{Var}(D) &= \mathrm{Var}\left(\frac{1}{w}\sum_{i=1}^wC_i^2\right) \\
+                  &= \frac{1}{w^2}\mathrm{Var}\left(\sum_{i=1}^wC_i^2\right) \\
+                  &= \frac{1}{w^2}\left(\sum_{i=1}^w\mathrm{Var}(C_i^2)\right) \\
+                  &\leq \frac{1}{w^2}\left(\sum_{i=1}^w2F_2^2\right) \\
+                  &= \frac{1}{w^2}\left(w\cdot2F_2^2\right) \\
+                  &= \frac{2F_2^2}{w}
+\end{align} where (3) follows because each run is independent (i.e. all $C_i^2$ are independent).
+\item We can again use Chebyshev's inequality to bound the probability.
+\[
+  Pr \left(\left|x-\mu\right| \geq c\sigma \right) \leq \frac{1}{c^2}
+\] If we let $x$ be $D$, then $\mu$ is $F_2$ and $\sigma^2\leq \frac{2F_2^2}{w}$, which means $\sigma \leq F_2\sqrt{\frac{2}{w}}$. We can then show that
+
+\begin{align*}
+  Pr \left(\left|x-\mu\right| \geq c\sigma \right) &\leq \frac{1}{c^2} \\
+  Pr \left(\left|D-F_2\right| \geq cF_2\sqrt{\frac{2}{w}} \right) &\leq \frac{1}{c^2} \\
+\end{align*} If we let $c=\epsilon\sqrt{\frac{w}{2}}$, we have 
+\begin{align*}
+  Pr \left(\left|D-F_2\right| \geq \epsilon F_2 \right) &\leq \frac{2}{w\epsilon^2}
+\end{align*} We then bound the inverse of this probability to be at least $p$ and solve for our desired $w$.
+\begin{align*}
+  1 - \frac{2}{w\epsilon^2} &\geq p \\
+  1 - p &\geq \frac{2}{w\epsilon^2} \\
+  w &\geq \frac{2}{(1-p)\epsilon^2} \\
+  &= O(\epsilon^{-2})
+\end{align*}
+\item We can choose the median value of all the results again as in a count sketch and use that as the estimate. We let $p=1-\frac{1}{e}$ Then we can use the Chernoff Bound as in lecture 11.
+\begin{align*}
+  Pr\left[ X > n/2 \right] < e^{\frac{-n(1/2-p)^2}{2p}}
+\end{align*} if X $\textasciitilde$ Binom(n,p) and p $<$ $1/2$. We need half of the estimates to be out of the bound to return the wrong median and we can model $X$ as a binomial distribution since each of the copies of the data structure is independent. Since we use the probability of getting a value that is out of the error bound, we let $p=\frac{1}{e}$ in the Chernoff Equation (note that this $p$ is a different $p$ from the original equation we had). We then get
+\begin{align*}
+  Pr\left[ X > d/2 \right] &< e^{\frac{-n(1/2-1/e)^2}{2(1/e)}} \\
+                           &= e^{(-O(1)\cdot d)}
+\end{align*} If we choose $d=O(\log \delta ^{-1})$, then $Pr[X>d/2] \leq \delta$ as desired and the success probability is at least $1-\delta$.
+\end{enumerate}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
