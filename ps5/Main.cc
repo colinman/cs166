@@ -69,10 +69,10 @@ int main() {
   std::cout << std::endl;
   
   /* Test cuckoo hashing. */
-  auto cuckooLoadFactors = {0.2, 0.3, 0.4, 0.45, 0.47};
+/*  auto cuckooLoadFactors = {0.2, 0.3, 0.4, 0.45, 0.47, 0.51};
 
   std::cout << "#### Timing Cuckoo Hashing ####" << std::endl;
   doAllReports<CuckooHashTable>(allHashFamilies, cuckooLoadFactors);
   std::cout << "###########################" << std::endl;
-  std::cout << std::endl;
+  std::cout << std::endl;*/
 }
