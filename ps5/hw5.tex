@@ -130,10 +130,10 @@ Taking it back to the original expression, we have
   w &\geq \frac{2}{(1-p)\epsilon^2} \\
   &= O(\epsilon^{-2})
 \end{align*}
-\item We can choose the median value of all the results again as in a count sketch and use that as the estimate. We let $p=1-\frac{1}{e}$ Then we can use the Chernoff Bound as in lecture 11.
+\item We can choose the median value of all the results again as in a count sketch and use that as the estimate. We let $p=1-\frac{1}{e}$ Then we can use the Chernoff Bound as in lecture 11. The bound states:
 \begin{align*}
-  Pr\left[ X > n/2 \right] < e^{\frac{-n(1/2-p)^2}{2p}}
-\end{align*} if X $\sim$ Binom(n,p) and $p<1/2$. We need half of the estimates to be out of the bound to return the wrong median and we can model $X$ as a binomial distribution since each of the copies of the data structure is independent. Since we use the probability of getting a value that is out of the error bound, we let $p=\frac{1}{e}$ in the Chernoff Equation (note that this $p$ is a different $p$ from the original equation we had). We then get
+  Pr\left[ X > n/2 \right] < e^{\frac{-n(1/2-q)^2}{2q}}
+\end{align*} if X $\sim$ Binom(n,q) and $q<1/2$. We need at least half of the estimates to be out of the bound to return the wrong median and we can model $X$ as a binomial distribution since each of the copies of the data structure is independent. Since $p$ is the probability of getting a value that is within the error bound, we let $q=1-p=\frac{1}{e}$ in the Chernoff Equation. We then get
 \begin{align*}
   Pr\left[ X > d/2 \right] &< e^{\frac{-n(1/2-1/e)^2}{2(1/e)}} \\
                            &= e^{(-O(1)\cdot d)}
