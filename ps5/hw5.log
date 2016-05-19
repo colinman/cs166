@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  18 MAY 2016 17:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  19 MAY 2016 03:06
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1066,119 +1066,7 @@ Overfull \hbox (10.18437pt too wide) in paragraph at lines 76--79
 /it/10 E []\OT1/cmr/m/n/10 )[]$
  []
 
-./hw5.tex:106: Missing } inserted.
-<inserted text> 
-                }
-l.106 \end{align*}
-                   We can show variance as follows:
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-./hw5.tex:106: Extra \right.
-<argument> ...\\ &= \frac {1}{w}w\cdot F_2\right ]
-                                                   \\ &= F_2 
-l.106 \end{align*}
-                   We can show variance as follows:
-I'm ignoring a \right that had no matching \left.
-
-./hw5.tex:106: Missing { inserted.
-<inserted text> 
-                {
-l.106 \end{align*}
-                   We can show variance as follows:
-I've put in what seems to be necessary to fix
-the current column of the current alignment.
-Try to go on, since this might almost work.
-
-./hw5.tex:106: Missing } inserted.
-<inserted text> 
-                }
-l.106 \end{align*}
-                   We can show variance as follows:
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-./hw5.tex:106: Extra \right.
-<argument> ...\\ &= \frac {1}{w}w\cdot F_2\right ]
-                                                   \\ &= F_2 
-l.106 \end{align*}
-                   We can show variance as follows:
-I'm ignoring a \right that had no matching \left.
-
-./hw5.tex:106: Missing \endgroup inserted.
-<inserted text> 
-                \endgroup 
-l.106 \end{align*}
-                   We can show variance as follows:
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-./hw5.tex:106: Missing { inserted.
-<inserted text> 
-                {
-l.106 \end{align*}
-                   We can show variance as follows:
-I've put in what seems to be necessary to fix
-the current column of the current alignment.
-Try to go on, since this might almost work.
-
-[2]
-
-LaTeX Warning: Command \textasciitilde invalid in math mode on input line 136.
-
-
-LaTeX Warning: Command \~ invalid in math mode on input line 136.
-
-./hw5.tex:136: Please use \mathaccent for accents in math mode.
-\add@accent ...@spacefactor \spacefactor }\accent 
-                                                  #1 #2\egroup \spacefactor ...
-l.136 \end{align*} if X $\textasciitilde
-                                        $ Binom(n,p) and p $<$ $1/2$. We nee...
-I'm changing \accent to \mathaccent here; wish me luck.
-(Accents are not the same in formulas as they are in text.)
-
-./hw5.tex:136: Missing { inserted.
-<to be read again> 
-                   \egroup 
-l.136 \end{align*} if X $\textasciitilde
-                                        $ Binom(n,p) and p $<$ $1/2$. We nee...
-A left brace was mandatory here, so I've put one in.
-You might want to delete and/or insert some corrections
-so that I will find a matching right brace soon.
-(If you're confused by all this, try typing `I}' now.)
-
-./hw5.tex:136: You can't use `\spacefactor' in math mode.
-\add@accent ...}\accent #1 #2\egroup \spacefactor 
-                                                  \accent@spacefactor 
-l.136 \end{align*} if X $\textasciitilde
-                                        $ Binom(n,p) and p $<$ $1/2$. We nee...
-Sorry, but I'm not programmed to handle this case;
-I'll just pretend that you didn't ask for it.
-If you're in the wrong mode, you might be able to
-return to the right one by typing `I}' or `I$' or `I\par'.
-
-./hw5.tex:136: Missing } inserted.
-<inserted text> 
-                }
-l.136 \end{align*} if X $\textasciitilde$
-                                          Binom(n,p) and p $<$ $1/2$. We nee...
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-Missing character: There is no è in font cmex10!
-[3]
+[2] [3]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 143.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 143.
  (./hw5.aux)
@@ -1189,10 +1077,10 @@ Package rerunfilecheck Info: File `hw5.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 143.
  ) 
 Here is how much of TeX's memory you used:
- 25802 strings out of 493089
- 609846 string characters out of 6134842
- 828700 words of memory out of 5000000
- 28847 multiletter control sequences out of 15000+600000
+ 25801 strings out of 493089
+ 609828 string characters out of 6134842
+ 827699 words of memory out of 5000000
+ 28846 multiletter control sequences out of 15000+600000
  6439 words of font info for 27 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,10n,77p,706b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1208,7 +1096,7 @@ exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
 xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texl
 ive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texliv
 e/2015/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb>
-Output written on hw5.pdf (3 pages, 120927 bytes).
+Output written on hw5.pdf (3 pages, 120952 bytes).
 PDF statistics:
  88 PDF objects out of 1000 (max. 8388607)
  70 compressed objects within 1 object stream
