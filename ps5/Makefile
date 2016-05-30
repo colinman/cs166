@@ -1,16 +1,16 @@
-CXXFLAGS = -std=c++11 -Wall -Werror -O0 -g
+CXXFLAGS = -std=c++11 -Wall -O0 -g
 CXX = g++
 
-OBJECTS = Main.o Hashes.o ChainedHashTable.o SecondChoiceHashTable.o LinearProbingHashTable.o RobinHoodHashTable.o CuckooHashTable.o HopscotchHashTable.o
+OBJECTS = Hopscotch_wrapper.o hopscotch.o 
 
-default: run-tests
+default: hopscotch-benchmark
 
-run-tests: $(OBJECTS)
+hopscotch-benchmark: $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-Main.o: Main.cc Timing.h Hashes.h ChainedHashTable.h SecondChoiceHashTable.h LinearProbingHashTable.h RobinHoodHashTable.h CuckooHashTable.h HopscotchHashTable.h
+Main.o: Hopscotch_wrapper.h hopscotch.hpp 
 
-%.o: %.cc %.h Hashes.h
+h.o: %.cc %.h Hashes.h
 
 clean:
 	rm -f run-tests *.o *~
