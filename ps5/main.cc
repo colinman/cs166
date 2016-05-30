@@ -6,6 +6,7 @@
 #include "LinearProbingHashTable.h"
 #include "RobinHoodHashTable.h"
 #include "CuckooHashTable.h"
+#include "HopscotchHashTable.h"
 #include "Timing.h"
 
 int main() {
@@ -34,15 +35,17 @@ int main() {
   };
 
   std::cout << "Correctness Tests" << std::endl;
+
   std::cout << "  Chained:        " << (checkCorrectness<ChainedHashTable>(allHashFamilies) ? "pass" : "fail") << std::endl;
   std::cout << "  Second-Choice:  " << (checkCorrectness<SecondChoiceHashTable>(allHashFamilies) ? "pass" : "fail") << std::endl;
   std::cout << "  Linear Probing: " << (checkCorrectness<LinearProbingHashTable>(allHashFamilies) ? "pass" : "fail") << std::endl;
   std::cout << "  Robin Hood:     " << (checkCorrectness<RobinHoodHashTable>(allHashFamilies) ? "pass" : "fail") << std::endl;
   std::cout << "  Cuckoo:         " << (checkCorrectness<CuckooHashTable>(allHashFamilies) ? "pass" : "fail") << std::endl;
+  std::cout << "  Hopscotch:      " << (checkCorrectness<HopscotchHashTable>(allHashFamilies) ? "pass" : "fail") << std::endl;	
   std::cout << std::endl;
 
   /* Test linear probing variants. */
-  auto probingLoadFactors = {0.3, 0.5, 0.7, 0.9, 0.99};
+  auto probingLoadFactors = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99};
 
   std::cout << "#### Timing Linear Probing ####" << std::endl;
   doAllReports<LinearProbingHashTable>(allHashFunctions, probingLoadFactors);
@@ -56,7 +59,7 @@ int main() {
   
   
   /* Test chained hashing variants. */
-  auto chainedLoadFactors = {0.3, 0.5, 0.7, 0.9, 0.99, 2.0, 5.00};
+  auto chainedLoadFactors = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99, 2.00, 5.00};
   
   std::cout << "#### Timing Chained ####" << std::endl;
   doAllReports<ChainedHashTable>(allHashFunctions, chainedLoadFactors);
@@ -67,12 +70,19 @@ int main() {
   doAllReports<SecondChoiceHashTable>(allHashFamilies, chainedLoadFactors);
   std::cout << "###########################" << std::endl;
   std::cout << std::endl;
-  
+ 
+ 
   /* Test cuckoo hashing. */
-  auto cuckooLoadFactors = {0.2, 0.3, 0.4, 0.45, 0.47};
+  auto cuckooLoadFactors = {0.1, 0.2, 0.3, 0.4, 0.45};
 
   std::cout << "#### Timing Cuckoo Hashing ####" << std::endl;
   doAllReports<CuckooHashTable>(allHashFamilies, cuckooLoadFactors);
   std::cout << "###########################" << std::endl;
   std::cout << std::endl;
+
+  auto hopscotchLoadFactors = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99};
+  std::cout << "### Timing Hopscotch Hashin ####" << std::endl;
+  doAllReports<HopscotchHashTable>(allHashFunctions, hopscotchLoadFactors);
+  std::cout << "###########################" << std::endl;
+  std::cout << std::endl;  
 }
