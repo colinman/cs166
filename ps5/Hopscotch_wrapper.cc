@@ -49,7 +49,7 @@ chrono::high_resolution_clock::duration benchmarkInsert(int numElements, int num
 }
 
 int main() {
-  int numThreads = 1;
+  int numThreads = 5;
 
   int key = 3;
   table = new Hopscotch();
