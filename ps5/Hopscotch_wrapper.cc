@@ -49,13 +49,11 @@ chrono::high_resolution_clock::duration benchmarkInsert(int numElements, int num
 }
 
 int main() {
-  int numThreads = 5;
+  int numThreads = 10;
 
-  int key = 3;
   table = new Hopscotch();
-  table->add(&key, NULL);
 
-  chrono::high_resolution_clock::duration time = benchmarkInsert(10000000, numThreads);
+  chrono::high_resolution_clock::duration time = benchmarkInsert(1000000, numThreads);
   long long nanoseconds = chrono::duration_cast<std::chrono::nanoseconds>(time).count();
   cout << "Total Insert Time: " << nanoseconds << " ns" << endl;
 
