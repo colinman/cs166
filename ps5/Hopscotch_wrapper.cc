@@ -2,37 +2,45 @@
 #include <chrono>
 #include <tuple>
 #include <random>
+#include <thread>
 #include <atomic>
 #include "Hopscotch_wrapper.h"
 
+using namespace std;
+
 Hopscotch *table;
 
-void benchmarkConcurrentInsert(std::atomic<int>* numProcessed, int target, std::chrono::high_resolution_clock::duration& testsTotal, std::mutex& totalMutex) {
+void benchmarkConcurrentInsert(atomic<int>* numProcessed, int target, chrono::high_resolution_clock::duration* testsTotal, mutex* totalMutex) {
 
-  std::chrono::high_resolution_clock::duration total = std::chrono::high_resolution_clock::duration::zero();
+  chrono::high_resolution_clock::duration total = chrono::high_resolution_clock::duration::zero();
   while (*numProcessed <= target) {
-    std::atomic_fetch_add(numProcessed, 1);
+    atomic_fetch_add(numProcessed, 1);
     int value = rand() % 10000;
-    auto before = std::chrono::high_resolution_clock::now();    
+    auto before = chrono::high_resolution_clock::now();
     table->add(&value, NULL);
-    auto after = std::chrono::high_resolution_clock::now();    
-    total += after - before;    
+    auto after = chrono::high_resolution_clock::now();
+    total += after - before;
   }
-  
 
-
-  totalMutex.lock();
-  testsTotal += total;
-  totalMutex.unlock();
+  totalMutex->lock();
+  *testsTotal = *testsTotal + total;
+  totalMutex->unlock();
 }
 
-std::chrono::high_resolution_clock::duration benchmarkInsert(int numElements) {
+chrono::high_resolution_clock::duration benchmarkInsert(int numElements, int numThreads) {
 
-  std::atomic<int> numProcessed = ATOMIC_VAR_INIT(0);
-  std::mutex totalMutex;
-  std::chrono::high_resolution_clock::duration total = std::chrono::high_resolution_clock::duration::zero();;
+  vector<thread> threads;
 
-  benchmarkConcurrentInsert(&numProcessed, numElements, total, totalMutex);
+  atomic<int> numProcessed = ATOMIC_VAR_INIT(0);
+  mutex totalMutex;
+  chrono::high_resolution_clock::duration total = chrono::high_resolution_clock::duration::zero();;
+
+  for (int i = 0; i < numThreads; i++) {
+    threads.push_back(thread(benchmarkConcurrentInsert, &numProcessed, numElements, &total, &totalMutex));
+  }
+
+  for (auto &t : threads) t.join();
+
   return total;
 }
 
@@ -43,8 +51,8 @@ int main() {
   table = new Hopscotch();
   table->add(&key, NULL);
 
-  std::chrono::high_resolution_clock::duration time = benchmarkInsert(1000);
-  int nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(time).count();
+  chrono::high_resolution_clock::duration time = benchmarkInsert(10000000, numThreads);
+  long long nanoseconds = chrono::duration_cast<std::chrono::nanoseconds>(time).count();
   cout << "Total Insert Time: " << nanoseconds << " ns" << endl;
 
   return 0;

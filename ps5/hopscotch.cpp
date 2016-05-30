@@ -32,16 +32,16 @@ void Hopscotch::trial(){
     temp=segments_arys+i;
     if (temp == NULL)
     {
-      cout<<"Temp Null at "<<i<<endl;
+      // cout<<"Temp Null at "<<i<<endl;
     }
-    if(temp->_key != NULL)
-    cout<<"Key:"<<*temp->_key<<" Data:"<<*temp->_data<<"Array index:"<<i<<endl;
-    else
-      cout<<"NULL at:"<<i<<endl;
+    // if(temp->_key != NULL)
+    // // cout<<"Key:"<<*temp->_key<<" Data:"<<*temp->_data<<"Array index:"<<i<<endl;
+    // else
+      // cout<<"NULL at:"<<i<<endl;
      
   }
    
-  cout<<"--------------------"<<endl;
+  // cout<<"--------------------"<<endl;
 }
 
 
@@ -184,7 +184,7 @@ bool Hopscotch::add(int *key,int *data){
     }while(0 != val);
   }
   start_bucket->unlock();
-  cout<<"Called Resize"<<endl;
+  // cout<<"Called Resize"<<endl;
   return false;
 }
 
