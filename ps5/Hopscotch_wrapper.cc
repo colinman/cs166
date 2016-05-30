@@ -16,8 +16,12 @@ void benchmarkConcurrentInsert(atomic<int>* numProcessed, int target, chrono::hi
   while (*numProcessed <= target) {
     atomic_fetch_add(numProcessed, 1);
     int value = rand() % 10000;
+    bool lookup = rand() % 2;
     auto before = chrono::high_resolution_clock::now();
-    table->add(&value, NULL);
+    if (!lookup)
+      table->add(&value, NULL);
+    else
+      table->contains(&value);
     auto after = chrono::high_resolution_clock::now();
     total += after - before;
   }
